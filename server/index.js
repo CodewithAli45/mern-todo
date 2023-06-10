@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const PORT = 5000;
+const dotenv = require('dotenv');
 const router = require('./routes/taskRoutes');
 const app = express();
 
+const PORT = process.env.PORT || 5000
 // middlewares
 app.use(cors());
 app.use(express.json());
