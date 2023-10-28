@@ -47,6 +47,7 @@ async function removeTask(req, res) {
 async function getTasks(req, res){
     try {
         const {id} = req.params;
+        
         const tasks = await Task.findById(id);   
 
         return res.status(200).json({
