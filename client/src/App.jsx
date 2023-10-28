@@ -1,16 +1,11 @@
-import React from 'react'
-import TodoForm from './components/TodoForm'
+import React from 'react';
+import Tasks from './components/Tasks/Tasks';
 
 
-
-export function App() {
+export const App = () => {
   return (
     <div>
-      <h1>
-        Data comming from backend
-      </h1>
-      <TodoForm />
+      <Tasks />
     </div>
-  )
+  );
 }
-
