@@ -1,68 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-
-const url = 'http://localhost:8080/api/v1/createTask';
+import React, { useState } from 'react';
+import DisplayTask from './DisplayTask';
+import './Task.css';
 
 const Tasks = () => {
-    const [task, setTask] = useState('');
-    const [tasks, setTasks] = useState([]);
+  const [inputText, setInputText] = useState('');
+  const [tasks, setTask] = useState([]);
 
-    useEffect(() => {
-        fetchTasks();
-    }, []);
-
-    const fetchTasks = async () => {
-        try {
-          const response = await axios.get(url);
-          setTasks(response.data.tasks);
-        } catch (error) {
-          console.error('Error fetching tasks:', error);
-        }
-      };
-
-    async function addTask(){
-        try {
-            await axios.post(url, {
-              title: task,
-              description: '', // Add a description if needed
-              completed: false, // Initially, the task is not completed
-            });
-            // Clear the input field and update the task list
-            setTask('');
-            fetchTasks();
-          } catch (error) {
-            console.error('Error adding task:', error);
-          }
+  function handleAddTask(e){
+    e.preventDefault();
+    if (inputText.trim() !== '') {
+      setTask([...tasks, { id: tasks.length + 1, text: inputText, completed: false }]);
+      setInputText('');
     }
+  }
 
-    function handleTaskChange(e){
-        setTask(e.target.value);
-    }
-    return (
-        <div>
-      <div className="tasks">
-        <input
-          type="text"
-          value={task}
-          onChange={handleTaskChange}
-          placeholder="Enter a task"
+  function handleTaskComplete(id){
+    const updateTask = tasks.map((task) => {
+      return task.id === id ? {...task, completed : !task.completed} : task
+    })
+    setTask(updateTask);
+  }
+
+  return (
+    <div className='container'>
+      <div className='heading'>Welcome to my Todo App</div>
+      <form className='input-box'>
+        <input 
+          type="text" 
+          placeholder='enter the task'
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
         />
-        <button onClick={addTask}>Add</button>
-      </div>
-      <div className="display">
-        <h2>Task List</h2>
-        <ul>
-          {tasks.map((task) => (
-            <li key={task.id}>
-              {task.title}
-              {task.description}
-              <button>Delete</button>
-            </li>
-          ))}
-        </ul>
+        <button onClick={handleAddTask}>Add</button>
+      </form>
+      <div className='display-task'>
+        {
+          tasks.map((task) => (
+            <DisplayTask 
+              key={task.id}
+              id={task.id}
+              text={task.text}
+              completed={task.completed}
+              onCompletedTask = {() => handleTaskComplete(task.id)}
+            />
+          ))
+        }
       </div>
     </div>
-    );
+  );
 }
 
 export default Tasks;
