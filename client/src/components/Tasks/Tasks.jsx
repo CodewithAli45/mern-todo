@@ -42,7 +42,7 @@ const Tasks = () => {
 
   function handleTaskComplete(id){
     const updateTask = tasks.map((task) => {
-      return task.id === id ? {...task, completed : !task.completed} : task
+      return task.sl === id ? {...task, completed : !task.completed} : task
     })
     setTask(updateTask);
   }
@@ -63,11 +63,11 @@ const Tasks = () => {
         {
           tasks.map((task) => (
             <DisplayTask 
-              key={task.id}
+              key={task._id}
               id={task.sl}
               text={task.description}
               completed={task.completed}
-              onCompletedTask={() => handleTaskComplete(task.id)}
+              onCompletedTask={() => handleTaskComplete(task.sl)}
             />
           ))
         }

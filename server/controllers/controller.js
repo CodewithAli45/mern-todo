@@ -1,7 +1,7 @@
 const Task = require('../models/taskModel');
 
 async function createTask(req, res){
-    const {description, completed} = req.body;
+    const {description} = req.body;
     try {
         const existingTasks = await Task.find();
         const newTask = {
