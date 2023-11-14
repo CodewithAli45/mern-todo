@@ -1,18 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DisplayTask from './DisplayTask';
+import axios from 'axios'
 import './Task.css';
 
 const Tasks = () => {
   const [inputText, setInputText] = useState('');
   const [tasks, setTask] = useState([]);
+  const [isAdded, setIsAdded] = useState(false);
+
+  const baseUrl = 'https://todo-services-zajb.onrender.com/api/v1'
+
+  const postURL = baseUrl+'/createTask';
+  const getURL = baseUrl + '/getAllTasks';
+
+  function addTask(){
+    const tasks = {description : inputText, completed : false};
+    // sl should be dynamic
+    axios.post(postURL, tasks).then(() => {
+      console.log('added in db');
+      setInputText('');
+      setIsAdded(true);
+    }).catch((error) => {
+      console.error('Error creating user:', error);
+      
+    });
+  }
 
   function handleAddTask(e){
     e.preventDefault();
-    if (inputText.trim() !== '') {
-      setTask([...tasks, { id: tasks.length + 1, text: inputText, completed: false }]);
-      setInputText('');
-    }
+    addTask();
   }
+
+  useEffect(() => {
+    axios.get(getURL).then((data) => {
+      const taskData = data.data.data;
+      console.log(taskData);
+      setTask(taskData.tasks);
+      
+    })
+  }, [getURL, isAdded]);
 
   function handleTaskComplete(id){
     const updateTask = tasks.map((task) => {
@@ -38,10 +64,10 @@ const Tasks = () => {
           tasks.map((task) => (
             <DisplayTask 
               key={task.id}
-              id={task.id}
-              text={task.text}
+              id={task.sl}
+              text={task.description}
               completed={task.completed}
-              onCompletedTask = {() => handleTaskComplete(task.id)}
+              onCompletedTask={() => handleTaskComplete(task.id)}
             />
           ))
         }
