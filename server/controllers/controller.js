@@ -1,6 +1,5 @@
 const Task = require('../models/taskModel');
 
-
 async function createTask(req, res){
     const {title, description} = req.body;
     try {
@@ -64,6 +63,23 @@ async function getTasks(req, res){
     }
 }
 
+async function getAllTask(req, res){
+    try {
+        const tasks = await Task.find();
+        return res.status(200).json({
+            status: "success",
+            data: {
+                tasks
+            }
+        })
+    } catch (error) {
+        return res.status(401).json({
+            status: "failure",
+            message: error.message
+        })
+    }
+}
+
 module.exports = {
-    createTask, removeTask, getTasks
+    createTask, removeTask, getTasks, getAllTask
 }

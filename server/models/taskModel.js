@@ -1,10 +1,9 @@
 const mongoose = require('mongoose');
 
 const taskSchema = mongoose.Schema({
-    id: { type: String, index: true },
-    title:{type:String, required:true},
+    title:{type:String},
     description:{type:String, required:true},
-    completed:{type:Boolean, required:true}
+    completed:{type:Boolean}
 });
 
 const Task = mongoose.model('Task', taskSchema);
