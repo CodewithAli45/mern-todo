@@ -47,6 +47,11 @@ const Tasks = () => {
     setTask(updateTask);
   }
 
+  function handleDeleteTask(id){
+    const deletedTask = tasks.filter((task) => task.sl !== id);
+    setTask(deletedTask);
+  }
+
   return (
     <div className='container'>
       <div className='heading'>Welcome to my Todo App</div>
@@ -68,6 +73,7 @@ const Tasks = () => {
               text={task.description}
               completed={task.completed}
               onCompletedTask={() => handleTaskComplete(task.sl)}
+              onDeleteTask={() => handleDeleteTask(task.sl)}
             />
           ))
         }
